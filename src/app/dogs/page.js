@@ -75,7 +75,7 @@ const Dogs = () => {
 
             {dogTerms &&
                   dogTerms.map((term) => (
-                    <Link href={term.slug} key={term.id} value={term.id}>
+                    <Link href={`dog-option/${term.slug}`}  key={term.id} value={term.id}>
                       {term.name}
                     </Link>
                   ))}
