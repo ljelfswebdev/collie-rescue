@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { fetchPageData } from '../../utils/fetchPageData';
 import { fetchPosts } from '../../utils/fetchPosts';
-import PostCard from '../../components/post-card';
+import PostCard from '../../components/cards/post-card';
 import Link from 'next/link';
 
 const Posts = () => {

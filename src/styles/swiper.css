@@ -37,3 +37,8 @@
 .swiper-pagination-bullet-active{
     background-color: #E8984A;
 }
+
+.news-slider .swiper-button-next,
+.news-slider .swiper-button-prev {
+    background-color: #3A3735;
+}

@@ -2,10 +2,12 @@
 
 // components/Homepage.js
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { fetchPageData } from '../utils/fetchPageData';
 import Loading from '../components/global/loading';
 import Hero from '../components/pages/homepage/hero';
 import Mission from '../components/pages/homepage/mission';
+import LatestNews from '../components/global/latest-news-slider';
 
 const Homepage = () => {
   const [pageData, setPageData] = useState(null);
@@ -43,13 +45,39 @@ const Homepage = () => {
           <Mission pageData={pageData}/>
         </div>
       </section>
-      <section className="" id="Homepage-about"></section>
-      <section className="" id="Homepage-counter"></section>
-      <section className="" id="Homepage-involved"></section>
-      <section className="" id="Homepage-collies"></section>
-      <section className="" id="Homepage-news"></section>
-      <section className="" id="Homepage-supporters"></section>
-      <section className="" id="Homepage-donation"></section>
+      <section className="" id="Homepage-about">
+        About
+      </section>
+      <section className="" id="Homepage-counter">
+        Counter
+      </section>
+      <section className="" id="Homepage-involved">
+        Involved
+      </section>
+      <section className="" id="Homepage-collies">
+        Collies
+      </section>
+      <section className="py-16" id="Homepage-news">
+          <div className="container">
+            <div className="flex flex-col gap-10">
+              {pageData.acf.latest_news_title && (
+                <h2 className="font-moch text-4xl text-text-title text-center">
+                  {pageData.acf.latest_news_title}
+                </h2>
+              )}
+              <LatestNews/>
+              <Link href="posts" className="button button--orange mx-auto mt-8">
+                View All Posts
+              </Link>
+            </div>
+          </div>
+      </section>
+      <section className="" id="Homepage-supporters">
+        Supporters
+      </section>
+      <section className="" id="Homepage-donation">
+        Dontions
+      </section>
     </>
   );
 };

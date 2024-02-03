@@ -26,7 +26,7 @@ const Mission = ({ pageData }) => {
             )}
         
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {missions.map((mission, index) => (
                     <Link href={mission.mission_link} key={index} className="group relative w-full overflow-hidden rounded-2xl h-[500px] flex items-center justify-center">
                         <div className="absolute bg-black/40 h-full w-full top-0 left-0 z-10"></div>
@@ -35,8 +35,8 @@ const Mission = ({ pageData }) => {
                                 src={mission.mission_image}
                                 alt={mission.mission_text}
                                 width={400}
-                                height={415}
-                                className="min-w-full object-cover transition-all duration-200 group-hover:scale-125"
+                                height={500}
+                                className="min-w-full h-full w-full object-cover transition-all duration-200 group-hover:scale-125"
                             />
                         </div>
                         <div 
@@ -48,7 +48,7 @@ const Mission = ({ pageData }) => {
                                 alt={mission.mission_text}
                                 width={32}
                                 height={32}
-                                className=""
+                                className="h-auto w-auto"
                             />
                         </div>
                         <div className="relative z-20 px-12 flex flex-col items-center h-full justify-center">
