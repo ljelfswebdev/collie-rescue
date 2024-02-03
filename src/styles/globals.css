@@ -15,3 +15,50 @@
     width:100%;
     margin: auto;
 }
+
+.container--post{
+    max-width: 1100px;
+    padding: 0px 16px;
+    width:100%;
+    margin: auto;
+}
+
+.post-block p:has(strong){
+    font-size: 40px;
+    font-weight: bold;
+    color: #3A3735;
+    margin-bottom: 20px;
+}
+
+.post-block ul {
+    margin: 0px 0px 0px 20px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+
+.post-block li{
+    margin-left: 20px;
+    position: relative;
+    color: #6a6a6a;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.post-block li:after{
+    background-image: url('../../public/svgs/tick.svg');
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 4px;
+    left: -36px;
+}
+
+
+.post-bg p, .post-bg strong{
+    color: #fff;
+}
