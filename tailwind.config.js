@@ -12,7 +12,7 @@ module.exports = {
         "blue":"#138AC9",
         "green":"#2BC342",
         "orange":"#E8984A",
-        "red":"#E27077",
+        "pink":"#E27077",
 
         "text-title":"#3A3735",
         "text-body":"#6A6A6A",
@@ -21,7 +21,12 @@ module.exports = {
       fontFamily: {
         'moch': ["'Mochiy Pop One'"],
         'sans': ["'DM Sans Variable'"],
-      }
+      },
+
+      screens: {
+				"mlg": "896px",
+			},
+      
     },
   },
   plugins: [],
