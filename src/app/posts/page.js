@@ -5,6 +5,7 @@ import axios from 'axios';
 import { fetchPageData } from '../../utils/fetchPageData';
 import { fetchPosts } from '../../utils/fetchPosts';
 import PostCard from '../../components/cards/post-card';
+import { usePathname } from 'next/navigation'
 import Link from 'next/link';
 import Banner from '../../components/global/banner';
 import Loading from '../../components/global/loading';
@@ -19,9 +20,21 @@ const Posts = () => {
   const [tags, setTags] = useState([]);
   const [selectedTagId, setSelectedTagId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTagName, setSelectedTagName] = useState('');
+  // const [selectedTagName, setSelectedTagName] = useState('');
   const [currentPage, setCurrentPage] = useState(1); 
   const [postsPerPage] = useState(6);
+  
+  useEffect(() => {
+    const pathname = window.location.search;
+    const urlSearchParams = new URLSearchParams(pathname);
+    const tagId = urlSearchParams.get('tagId');
+
+    if (tagId) {
+      const tagIdNumber = parseInt(tagId, 10);
+      console.log('Extracted Number:', tagIdNumber);
+      handleTagChange(tagIdNumber);
+    }
+  }, []);
 
   useEffect(() => {
     const slug = 'posts';
@@ -65,20 +78,19 @@ const Posts = () => {
   }, []);
 
 
-  const handleTagChange = (event) => {
-    const newTagId = event.target.value;
-    const newTagName = event.target.getAttribute('data_name') || '';
-
+  const handleTagChange = (newTagId, event) => {
+    const newTagName = event ? event.target.getAttribute('data_name') || '' : '';
     setSelectedTagId(newTagId);
-    setSelectedTagName(newTagName);
+    // setSelectedTagName(newTagName);
     setSearchQuery('');
     setCurrentPage(1); // Reset to the first page when tag changes
   };
+  
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
     setSelectedTagId(null);
-    setSelectedTagName(null);
+    // setSelectedTagName(null);
     setCurrentPage(1); // Reset to the first page when search changes
   };
 
@@ -119,11 +131,11 @@ const Posts = () => {
       <div className="container">
         <div className="grid gap-10 grid-cols-1 mlg:grid-cols-[1fr_380px]">
           <div className="flex flex-col gap-4">
-            {selectedTagName && (
+            {/* {selectedTagName && (
               <div className="font-moch text-xl font-bold text-text-title">
                 {selectedTagName}
             </div>
-            )}
+            )} */}
             {searchQuery && (
               <div className="font-moch text-xl font-bold text-text-title">
                 {searchQuery}
@@ -154,28 +166,29 @@ const Posts = () => {
             Tags
           </div>
           {tags &&
-            tags.map((tag) => (
-              <div key={tag.id} className="mb-2">
-                <input
-                  type="radio"
-                  name="tags"
-                  id={tag.id}
-                  value={tag.id}
-                  data_name={tag.name}
-                  onChange={handleTagChange}
-                  checked={selectedTagId === tag.id}
-                  hidden
-                />
-                <label
-                  htmlFor={tag.id}
-                  className={`cursor-pointer font-moch hover:text-text-title ${
-                    selectedTagId === tag.id ? 'text-blue' : 'text-text-body'
-                  }`}
-                >
-                  {tag.name}
-                </label>
-              </div>
-            ))}
+          tags.map((tag) => (
+            <div key={tag.id} className="mb-2">
+              <input
+                type="radio"
+                name="tags"
+                id={tag.id}
+                value={tag.id}
+                data_name={tag.name}
+                onChange={(event) => handleTagChange(tag.id, event)} // Pass tag.id and event to handleTagChange
+                checked={selectedTagId === tag.id}
+                hidden
+              />
+              <label
+                htmlFor={tag.id}
+                className={`cursor-pointer font-moch hover:text-text-title ${
+                  selectedTagId === tag.id ? 'text-green' : 'text-text-body'
+                }`}
+              >
+                {tag.name}
+              </label>
+            </div>
+          ))}
+
 
 
           </div>

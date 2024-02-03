@@ -24,7 +24,7 @@ const PostDetail = () => {
 
   const [tagsName, setTagsName] = useState([]);
 
-  console.log(postDetail);
+  // console.log(postDetail);
 
   useEffect(() => {
     if (id) {
@@ -190,7 +190,7 @@ const PostDetail = () => {
           <div className="flex flex-wrap gap-4 items-center">
             <span className="font-moch text-2xl text-text-body">Tags</span>
             {tagsName.map((tag, index) => (
-                <Link href="/posts" key={index} className="button button--orange">
+                <Link href="/posts" as={`/posts?tagId=${tag.id}`} key={index} className="button button--orange">
                     {tag.name}
                 </Link>
               ))}
@@ -202,14 +202,6 @@ const PostDetail = () => {
           <h2 className="font-moch text-4xl text-text-title text-center mb-10">
             Related Posts
           </h2>
-          {/* {postDetail.acf.related_posts && (
-            postDetail.acf.related_posts.map((related, index) => (
-              <div key={index}>
-                {related.post_title}
-              </div>
-              
-            ))
-          )} */}
           <LatestNews relatedPosts={postDetail.acf.related_posts} />
         </div>
       </section>
