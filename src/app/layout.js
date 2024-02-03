@@ -1,5 +1,5 @@
-import "./globals.css";
-import "./styles/buttons.css"
+import "../styles/globals.css";
+import "../styles/buttons.css";
 
 
 export const metadata = {

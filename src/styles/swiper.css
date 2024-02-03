@@ -13,11 +13,11 @@
 }
 
 .swiper-button-next:after{
-    content:url('../../../public/swiper/next.svg');
+    content:url('../../public/swiper/next.svg');
 }
 
 .swiper-button-prev:after{
-    content:url('../../../public/swiper/prev.svg');
+    content:url('../../public/swiper/prev.svg');
 }
 
 

@@ -1,5 +1,4 @@
 // "use client"
-import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -15,7 +14,12 @@ const Hero = ({ pageData }) => {
 
   return (
     <>
-    <h1 className="font-moch text-white font-bold text-4xl text-center max-w-lg mx-auto mb-10">{title}</h1>
+
+{title && (
+  <h1 className="font-moch text-white font-bold text-4xl text-center max-w-lg mx-auto mb-10">
+    {title}
+  </h1>
+)}
     <Swiper
       slidesPerView={1}
       navigation={true}

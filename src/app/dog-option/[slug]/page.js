@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import axios from 'axios';
 import { fetchDogs } from '../../../utils/fetchDogs';
-import DogCard from '../../../components/dog-card';
+import DogCard from '../../../components/cards/dog-card';
 
 const DogTerm = () => {
   const pathname = usePathname();

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { fetchPageData } from '../../utils/fetchPageData';
 import { fetchDogs } from '../../utils/fetchDogs';
-import DogCard from '../../components/dog-card';
+import DogCard from '../../components/cards/dog-card';
 import Link from 'next/link';
 
 const Dogs = () => {
