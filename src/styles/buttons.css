@@ -30,3 +30,12 @@
     color: #E27077;
     background-color: #fff;
 }
+
+.button--black{
+    background-color:#3a3735;  
+    border-color: #3a3735; 
+}
+.button--black:hover{
+    color: #3a3735;
+    background-color: #fff;
+}

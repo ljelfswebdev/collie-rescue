@@ -113,7 +113,7 @@ const Posts = () => {
    // Calculate the total number of pages based on the number of filtered posts and posts per page
    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
-  if (isLoading) {
+  if (isLoading || !pageData) {
     return( 
       <Loading/>
     );

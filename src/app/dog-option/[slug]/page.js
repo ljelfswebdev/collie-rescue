@@ -5,19 +5,22 @@ import { usePathname } from 'next/navigation';
 import axios from 'axios';
 import { fetchDogs } from '../../../utils/fetchDogs';
 import DogCard from '../../../components/cards/dog-card';
+import Banner from '../../../components/global/banner';
+import Loading from '../../../components/global/loading';
+import { fetchTaxData } from '../../../utils/fetchPageData';
 
 const DogTerm = () => {
   const pathname = usePathname();
   const parts = pathname.split('/');
   const id = parts[parts.length - 1];
 
+  const [pageData, setPageData] = useState(null);
+
   const [taxonomyName, setTaxonomyName] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [dogs, setDogs] = useState([]);
   const [matchingTermId, setMatchingTermId] = useState(null);
-// ... existing state variables ...
 
-const [bannerText, setBannerText] = useState(null);
 
 useEffect(() => {
   const fetchData = async () => {
@@ -33,9 +36,6 @@ useEffect(() => {
           const name = matchingTerm.name;
           setTaxonomyName(name);
           setMatchingTermId(matchingTerm.id);
-
-          const termBannerText = matchingTerm.acf.banner_text;
-          setBannerText(termBannerText);
 
           const dogsResponse = await fetchDogs();
           setDogs(dogsResponse);
@@ -55,7 +55,18 @@ useEffect(() => {
   fetchData();
 }, [id]);
 
-
+useEffect(() => {
+  if (taxonomyName) {
+    const slug = taxonomyName.toLowerCase();
+    fetchTaxData(slug)
+      .then((data) => {
+        setPageData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching page data:", error);
+      });
+  }
+}, [taxonomyName]);
 
   useEffect(() => {
     if (matchingTermId && dogs.length > 0) {
@@ -69,28 +80,28 @@ useEffect(() => {
   }, [matchingTermId, dogs]);
   
 
-  if (isLoading) {
+  if (isLoading || !pageData) {
     return (
-      <div className="loading">
-        <img src="/loading.gif" alt="Loading..." />
-      </div>
+      <Loading/>
     );
   }
 
   return (
     <div>
-      {taxonomyName && <p>Taxonomy Name: {taxonomyName}</p>}
-      {bannerText && <div dangerouslySetInnerHTML={{ __html: bannerText }} />}
-
+      <Banner pageData={pageData}/>
+      
       {dogs.length > 0 ? (
-        <ul>
-          {dogs.map(dog => (
-            <DogCard dog={dog} key={dog.id} />
-          ))}
-        </ul>
+        <div className="container">
+          <div className="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-10">
+            {dogs.map(dog => (
+              <DogCard dog={dog} key={dog.id} />
+            ))}
+          </div>
+          </div>
       ) : (
-        <p>No dogs found for the given term.</p>
+        <p className="text-xl font-moch text-text-title">No dogs found for the given term.</p>
       )}
+      
     </div>
   );
   

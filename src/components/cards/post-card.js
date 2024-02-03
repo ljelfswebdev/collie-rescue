@@ -37,17 +37,29 @@ const PostCard = ({ post }) => {
   }, [post]);
   return ( 
     <Link href={`/posts/${post.id}`} className="rounded-xl overflow-hidden group">
-      {post.acf.image && (
-        <div className="overflow-hidden">
-          <Image
+        {post.acf.image && (
+          <div className="overflow-hidden rounded-xl rounded-bl-none">
+            <Image
               src={post.acf.image}
               alt={post.title.rendered}
               width={400}
               height={400}
-              className="w-auto h-auto rounded-xl rounded-bl-none transition-all duration-200 group-hover:scale-125"
-          />
-        </div>
-      )}
+              className="w-full h-full object-cover transition-all duration-200 group-hover:scale-125"
+            />
+          </div>
+        )}
+        {!post.acf.image && (
+          <div className="overflow-hidden rounded-xl rounded-bl-none">
+            <Image
+              src="/collie-placeholder.png"
+              alt="Placeholder"
+              width={400}
+              height={400}
+              className="w-full h-full object-cover transition-all duration-200 group-hover:scale-125"
+            />
+          </div>
+        )}
+
       
       {categoryName && categoryName !== 'Uncategorized' && (
         <div className="w-fit px-4 py-2 bg-black rounded-t-none rounded-b font-moch text-white mb-4">
@@ -59,7 +71,6 @@ const PostCard = ({ post }) => {
 
       <div className="flex gap-2 items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path data-name="Path 2019" d="M7.25 3.75A.748.748 0 0 1 8 3a.748.748 0 0 1 .75.75V7.6l2.666 1.775a.724.724 0 0 1 .184 1.041.688.688 0 0 1-1.012.181l-3-2a.685.685 0 0 1-.334-.625ZM8 0a8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8ZM1.5 8A6.5 6.5 0 0 0 8 14.5 6.5 6.5 0 0 0 14.5 8 6.5 6.5 0 0 0 8 1.5 6.5 6.5 0 0 0 1.5 8Z" fill="#232120" opacity=".999"/></svg>
-      
         <span className="font-sans text-text-body">
           {formattedDate}
         </span>
