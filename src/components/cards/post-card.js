@@ -36,15 +36,15 @@ const PostCard = ({ post }) => {
     }
   }, [post]);
   return ( 
-    <Link href={`/posts/${post.id}`} className="">
+    <Link href={`/posts/${post.id}`} className="rounded-xl overflow-hidden group">
       {post.acf.image && (
-        <div className="">
+        <div className="overflow-hidden">
           <Image
               src={post.acf.image}
               alt={post.title.rendered}
               width={400}
               height={400}
-              className="w-auto h-auto rounded-xl rounded-bl-none"
+              className="w-auto h-auto rounded-xl rounded-bl-none transition-all duration-200 group-hover:scale-125"
           />
         </div>
       )}

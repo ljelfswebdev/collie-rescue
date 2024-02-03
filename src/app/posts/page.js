@@ -142,7 +142,7 @@ const Posts = () => {
             </div>
             )}
             
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+            <div className="grid gap-8 grid-cols-1 mb-10 md:grid-cols-2">
               {currentPosts.map((post) => (
                 <PostCard post={post} key={post.id} />
               ))}
