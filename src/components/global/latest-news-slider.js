@@ -1,3 +1,5 @@
+"use client"
+
 import PostCard from "../cards/post-card";
 import { useEffect, useState } from "react";
 import { fetchPosts } from "../../utils/fetchPosts";

@@ -6,8 +6,12 @@ import Link from 'next/link';
 import { fetchPageData } from '../utils/fetchPageData';
 import Loading from '../components/global/loading';
 import Hero from '../components/pages/homepage/hero';
-import Mission from '../components/pages/homepage/mission';
-import LatestNews from '../components/global/latest-news-slider';
+// import Mission from '../components/pages/homepage/mission';
+// import LatestNews from '../components/global/latest-news-slider';
+import dynamic from 'next/dynamic'
+const LatestNews = dynamic(() => import('../components/global/latest-news-slider'), { ssr: false });
+const Mission = dynamic(() => import('../components/pages/homepage/mission'), { ssr: false });
+
 
 const Homepage = () => {
   const [pageData, setPageData] = useState(null);
