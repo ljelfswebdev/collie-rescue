@@ -5,13 +5,23 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      colors: {
+        "blue":"#138AC9",
+        "green":"#2BC342",
+        "orange":"#E8984A",
+        "red":"#E27077",
+
+        "text-title":"#3A3735",
+        "text-body":"#6A6A6A",
       },
+
+      fontFamily: {
+        'moch': ["'Mochiy Pop One'"],
+        'sans': ["'DM Sans Variable'"],
+      }
     },
   },
   plugins: [],

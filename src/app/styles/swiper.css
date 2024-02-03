@@ -1,0 +1,39 @@
+.swiper-button-next, .swiper-button-prev{
+    background-color: #E27077;
+    border-radius: 50%;
+    height:30px;
+    width:30px;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after{
+    width:6.5px;
+    height: 6.5px;
+    top:-17px;
+    position: absolute;
+}
+
+.swiper-button-next:after{
+    content:url('../../../public/swiper/next.svg');
+}
+
+.swiper-button-prev:after{
+    content:url('../../../public/swiper/prev.svg');
+}
+
+
+.swiper-pagination{
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.swiper-pagination-bullet{
+    height:6px;
+    width:6px;
+    border:1px solid white;
+    background-color: white;
+    opacity: 1;
+}
+.swiper-pagination-bullet-active{
+    background-color: #E8984A;
+}

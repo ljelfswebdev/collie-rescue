@@ -3,6 +3,8 @@
 // components/Homepage.js
 import React, { useEffect, useState } from 'react';
 import { fetchPageData } from '../utils/fetchPageData';
+import Loading from './components/global/loading';
+import Hero from './components/pages/homepage/hero';
 
 const Homepage = () => {
   const [pageData, setPageData] = useState(null);
@@ -24,16 +26,17 @@ const Homepage = () => {
 
   if (isLoading) {
     return( 
-    <div className="loading">
-      <img src="/loading.gif"/>
-    </div> );
+      <Loading/>
+     );
   }
 
   return (
     <>
-      <div className="">
-              {pageData.acf.homepage_text}
-            </div>
+      <section className="bg-blue pt-48 pb-20" id="HomePage-Hero">
+        <div className="container">
+            <Hero pageData={pageData}/>
+        </div>
+      </section>
     </>
   );
 };
