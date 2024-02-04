@@ -39,3 +39,12 @@
     color: #3a3735;
     background-color: #fff;
 }
+
+.button--green{
+    background-color:#2bc342;  
+    border-color: #2bc342; 
+}
+.button--green:hover{
+    color: #2bc342;
+    background-color: #fff;
+}
