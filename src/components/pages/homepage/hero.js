@@ -38,7 +38,7 @@ const Hero = ({ pageData }) => {
         </SwiperSlide>
       ))}
     </Swiper>
-    <div className="w-full mx-auto flex justify-center items-center gap-4 z-10 relative -mt-20">
+    <div className="w-full mx-auto flex flex-wrap justify-center items-center gap-4 z-10 relative mt-10 md:-mt-20">
         <Link href="rehoming" className="button button--orange">
             Dogs For Rehoming
         </Link>

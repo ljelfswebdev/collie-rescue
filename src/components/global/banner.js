@@ -17,7 +17,7 @@ const Banner = ({pageData}) => {
                            )} 
                     </div>
                     {pageData.acf.page_title && (
-                        <h1 className="font-moch font-bold text-4xl text-text-title">{pageData.acf.page_title}</h1>
+                        <h1 className="font-moch font-bold text-4xl text-text-title text-center">{pageData.acf.page_title}</h1>
                     )}
                 </div>
             </div>

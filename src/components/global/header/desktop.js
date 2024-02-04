@@ -2,28 +2,9 @@
 import "../../../styles/header.css";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 
-const DesktopHeader = () => {
-    const apiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-    const [dogTerms, setDogTerms] = useState([]);
-    useEffect(() => {
-        const fetchDogTerms = async () => {
-          try {
-            const response = await axios.get(`${apiBaseUrl}/dog-option`);
-            const dogTerms = response.data;
-            setDogTerms(dogTerms);
-          } catch (error) {
-            console.error('Error fetching terms of "dog" taxonomy:', error);
-          }
-        };
-    
-        fetchDogTerms();
-      }, []);
-
-
+const DesktopHeader = ({ dogTerms }) => {
     return ( 
         <div className="container">
             <div className="flex gap-32 justify-between items-center">
@@ -51,7 +32,7 @@ const DesktopHeader = () => {
                             <ul className="flex flex-col gap-2">
                             {dogTerms.map((term) => (
                                 <li key={term.id} className="font-normal hover:font-bold">
-                                <Link href={term.slug}>    
+                                <Link href={`dog-option/${term.slug}`}>    
                                     {term.acf.page_title}
                                 </Link>
                                 </li>
