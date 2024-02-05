@@ -2,6 +2,9 @@
 import "../../../styles/header.css";
 import Image from "next/image";
 import Link from "next/link";
+import supportUs from "./data/supportUs";
+import advice from "./data/advice";
+import about from "./data/about";
 
 
 const DesktopHeader = ({ dogTerms }) => {
@@ -57,21 +60,13 @@ const DesktopHeader = ({ dogTerms }) => {
                         </span>
                         <div className="header-dropdown absolute hidden bg-white p-6 rounded-2xl shadow-xl min-w-80 top-full w-fit group-hover:flex">
                         <ul className="flex flex-col gap-2">
-                            <li className="font-normal hover:font-bold">
-                                <Link href="/fundraising-and-donations">
-                                    Fundraising & Donations
+                            {supportUs.map((item) => (
+                                <li key={item.id}className="font-normal hover:font-bold">
+                                <Link href={`/${item.link}`}>
+                                   {item.name}
                                 </Link>
                             </li>
-                            <li className="font-normal hover:font-bold">
-                                <Link href="/posts">
-                                    News & Events
-                                </Link>
-                            </li>
-                            <li className="font-normal hover:font-bold">
-                                <Link href="/shop">
-                                    Gift Shop
-                                </Link>
-                            </li>
+                            ))}
                         </ul>
                         </div>
                     </li>
@@ -82,26 +77,13 @@ const DesktopHeader = ({ dogTerms }) => {
                         </span>
                         <div className="header-dropdown absolute hidden bg-white p-6 rounded-2xl shadow-xl min-w-80 top-full w-fit group-hover:flex">
                             <ul className="flex flex-col gap-2">
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/collie-heath">
-                                        Collie Heath
-                                    </Link>
-                                </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/poetry-corner">
-                                        Poetry Corner
-                                    </Link>
-                                </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/useful-links">
-                                    Useful Links
-                                    </Link>
-                                </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/contact-us">
-                                    Contact Us
-                                    </Link>
-                                </li>
+                            {advice.map((item) => (
+                                <li  key={item.id}className="font-normal hover:font-bold">
+                                <Link href={`/${item.link}`}>
+                                   {item.name}
+                                </Link>
+                            </li>
+                            ))}
                             </ul>
                         </div>
                     </li>
@@ -112,16 +94,13 @@ const DesktopHeader = ({ dogTerms }) => {
                         </span>
                         <div className="header-dropdown absolute hidden bg-white p-6 rounded-2xl shadow-xl min-w-80 top-full w-fit group-hover:flex">
                             <ul className="flex flex-col gap-2">
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/about-us">
-                                        About Our Rescue
+                                {about.map((item) => (
+                                    <li  key={item.id}className="font-normal hover:font-bold">
+                                    <Link href={`/${item.link}`}>
+                                    {item.name}
                                     </Link>
                                 </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/newsletters">
-                                        Newsletters
-                                    </Link>
-                                </li>
+                                ))}
                             </ul>
                         </div>
                     </li>

@@ -3,6 +3,9 @@ import "../../../styles/header.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import supportUs from "./data/supportUs";
+import advice from "./data/advice";
+import about from "./data/about";
 
 const MobileHeader = ({dogTerms}) => {
     const [isChecked, setIsChecked] = useState(false);
@@ -127,21 +130,13 @@ const MobileHeader = ({dogTerms}) => {
                         </label>
                         <div className="overflow-hidden transition-all max-h-0 peer-checked:max-h-96">
                             <ul className="flex flex-col gap-2 items-center">
-                                <li className="font-normal text-center hover:font-bold">
-                                    <Link href="/fundraising-and-donations"  className="flex text-center" onClick={handleLinkClick}>
-                                        Fundraising & Donations
+                                {supportUs.map((item) => (
+                                <li key={item.id}  className="font-normal text-center hover:font-bold">
+                                    <Link href={`/${item.link}`} className="flex text-center" onClick={handleLinkClick}>
+                                       {item.name}
                                     </Link>
                                 </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/posts" className="flex text-center" onClick={handleLinkClick}>
-                                        News & Events
-                                    </Link>
-                                </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/shop" className="flex text-center" onClick={handleLinkClick}>
-                                        Gift Shop
-                                    </Link>
-                                </li>
+                                ))}
                             </ul>
                         </div>
                     </li>
@@ -161,26 +156,13 @@ const MobileHeader = ({dogTerms}) => {
                         </label>
                         <div className="overflow-hidden transition-all max-h-0 peer-checked:max-h-96">
                             <ul className="flex flex-col gap-2 items-center">
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/collie-heath" className="flex text-center" onClick={handleLinkClick}>
-                                        Collie Heath
+                                {advice.map((item) => (
+                                <li key={item.id}  className="font-normal text-center hover:font-bold">
+                                    <Link href={`/${item.link}`} className="flex text-center" onClick={handleLinkClick}>
+                                       {item.name}
                                     </Link>
                                 </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/poetry-corner" className="flex text-center" onClick={handleLinkClick}>
-                                        Poetry Corner
-                                    </Link>
-                                </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/useful-links" className="flex text-center" onClick={handleLinkClick}>
-                                    Useful Links
-                                    </Link>
-                                </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/contact-us" className="flex text-center" onClick={handleLinkClick}>
-                                    Contact Us
-                                    </Link>
-                                </li>
+                                ))}
                             </ul>
                         </div>
                     </li>
@@ -201,16 +183,13 @@ const MobileHeader = ({dogTerms}) => {
                         </label>
                         <div className="overflow-hidden transition-all max-h-0 peer-checked:max-h-96">
                             <ul className="flex flex-col gap-2 items-center">
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/about-us" className="flex text-center" onClick={handleLinkClick}>
-                                        About Our Rescue
+                            {about.map((item) => (
+                                <li key={item.id}  className="font-normal text-center hover:font-bold">
+                                    <Link href={`/${item.link}`} className="flex text-center" onClick={handleLinkClick}>
+                                       {item.name}
                                     </Link>
                                 </li>
-                                <li className="font-normal hover:font-bold">
-                                    <Link href="/newsletters" className="flex text-center" onClick={handleLinkClick}>
-                                        Newsletters
-                                    </Link>
-                                </li>
+                                ))}
                             </ul>
                         </div>
                     </li>
