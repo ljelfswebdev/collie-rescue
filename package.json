@@ -11,8 +11,10 @@
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.0.3",
     "@fontsource/mochiy-pop-one": "^5.0.17",
+    "@woocommerce/woocommerce-rest-api": "^1.0.1",
     "axios": "^1.6.7",
     "next": "14.1.0",
+    "oauth-1.0a": "^2.2.6",
     "react": "^18",
     "react-dom": "^18",
     "swiper": "^11.0.5"
