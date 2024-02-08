@@ -43,6 +43,7 @@ const Shop = () => {
         });
         const fetchedProducts = response.data;
         setProducts(fetchedProducts);
+        console.log(fetchedProducts);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching Products:", error);
@@ -63,7 +64,7 @@ const Shop = () => {
       <ul>
         {products.map((product) => (
           <li key={product.id}>
-             <Link href={`shop/${product.slug}`}>
+             <Link href={`shop/${product.id}`}>
                 {product.name}
             {product.price}
             </Link>
