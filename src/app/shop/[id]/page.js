@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Loading from '../../../components/global/loading';
 import { useCart } from '../../../utils/cartContext';
+import Dropdown from 'react-dropdown';
 
 const Product = () => {
     const pathname = usePathname();
@@ -24,6 +25,8 @@ const Product = () => {
     const [quantity, setQuantity] = useState(1); 
 
     const { addToCart } = useCart();
+
+    // console.log(productDetail);
 
     useEffect(() => {
         const oauth = OAuth({
@@ -83,25 +86,48 @@ const Product = () => {
     };
 
     const renderOptions = (attribute) => {
-        return attribute.options.map((option, index) => (
-            <label key={index}>
+        return attribute.options.map((option, index) => {
+            // Dynamically generate a class name based on the option value
+            const beforeBg = `before:bg-${option.toLowerCase()}`;
+    
+            return (
+            <div key={index}>
                 <input
-                    type="radio"
-                    name={attribute.name}
-                    value={option}
-                    onChange={() => handleOptionChange(attribute.name, option)}
-                    checked={selectedOptions[attribute.name] === option}
-                />
-                {option}
-            </label>
-        ));
+                        type="checkbox"
+                        name={attribute.name}
+                        value={option}
+                        onChange={() => handleOptionChange(attribute.name, option)}
+                        checked={selectedOptions[attribute.name] === option}
+                        id={option}
+                        hidden
+                        className="peer"
+                    />
+                   
+               <label 
+                    htmlFor={option} 
+                    className={`relative font-primary text-text-body flex flex-col justify-center items-center
+                                before:content-[''] before:relative before:h-12 before:w-12 before:rounded-full before:border before:border-solid before:border-grey
+                                before:bg-${option.toLowerCase()}
+                                peer-checked:before:border-4
+                    `}
+                >
+                    {option}
+                </label>
+
+            </div>
+            
+            );
+        });
     };
 
+    
     const renderAttributes = () => {
         return productDetail.attributes.map((attribute, index) => (
-            <div key={index}>
-                <p>{attribute.name}:</p>
+            <div key={index} className="flex flex-col gap-2">
+                <p className="font-primary text-text-title text-base">{attribute.name}</p>
+                <div className="flex gap-8">
                 {renderOptions(attribute)}
+                </div>
             </div>
         ));
     };
@@ -114,6 +140,40 @@ const Product = () => {
 
     return (
         <>
+        <section className="py-10" id="Product-info">
+            <div className="container">
+                <div className="grid grid-cols-1 gap-10 mlg:grid-cols-2">
+                    <div className="border-2 border-solid border-grey rounded-xl overflow-hidden">
+                        <Image 
+                        src={productDetail.images[0].src}
+                        alt={productDetail.name}
+                        width={500}
+                        height={600}
+                        className="w-full min-h-[600px] object-cover"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                    {productDetail.categories.length > 0 && (
+                        <span className="font-secondary text-orange mb-6">
+                            {productDetail.categories[0].name}
+                        </span>
+                    )}
+                    <h2 className="font-primary text-4xl text-text-title font-bold mb-6">
+                        {productDetail.name}
+                    </h2>
+                    {productDetail.description && (
+                        <span className="font-secondary text-text-body mb-6" 
+                        dangerouslySetInnerHTML={{ __html: productDetail.description }}
+                        >
+                        </span>
+                    )}
+                    
+                    {renderAttributes()}
+                    
+                    </div>
+                </div>
+            </div>
+        </section>
             <h1>{productDetail.name}</h1>
             <p>£{productDetail.price}</p>
             {renderAttributes()}
