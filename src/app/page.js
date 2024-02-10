@@ -11,7 +11,7 @@ import Hero from '../components/pages/homepage/hero';
 import dynamic from 'next/dynamic'
 const LatestNews = dynamic(() => import('../components/global/latest-news-slider'), { ssr: false });
 const Mission = dynamic(() => import('../components/pages/homepage/mission'), { ssr: false });
-const Counter = dynamic(() => import('../components/pages/homepage/counter'), { ssr: false });
+const Counter = dynamic(() => import('../components/global/counter'), { ssr: false });
 
 
 const Homepage = () => {
