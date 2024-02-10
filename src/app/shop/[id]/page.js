@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
 import OAuth from "oauth-1.0a";
 import crypto from "crypto";
@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import Link from "next/link";
 import Image from "next/image";
 import Loading from '../../../components/global/loading';
+import { useCart } from '../../../utils/cartContext';
 
 const Product = () => {
     const pathname = usePathname();
@@ -19,6 +20,10 @@ const Product = () => {
   
     const [productDetail, setProductDetail] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedOptions, setSelectedOptions] = useState({});
+    const [quantity, setQuantity] = useState(1); 
+
+    const { addToCart } = useCart();
 
     useEffect(() => {
         const oauth = OAuth({
@@ -48,7 +53,6 @@ const Product = () => {
             });
             const fetchedProduct = response.data;
             setProductDetail(fetchedProduct);
-            // console.log(fetchedProduct);
             setIsLoading(false);
           } catch (error) {
             console.error("Error fetching Products:", error);
@@ -57,17 +61,70 @@ const Product = () => {
         };
         fetchProducts();
       }, [apiBaseUrl, consumerKey, consumerSecret]);
-    
-      if (isLoading) {
+
+    const handleOptionChange = (attributeName, optionValue) => {
+        setSelectedOptions({ ...selectedOptions, [attributeName]: optionValue });
+    };
+
+    const handleAddToCart = () => {
+        const identifier = JSON.stringify(selectedOptions);
+        const productWithOptions = { ...productDetail, selectedOptions, identifier, quantity }; // Include quantity in productWithOptions
+        addToCart(productWithOptions);
+    };
+
+    const handleIncreaseQuantity = () => {
+        setQuantity(quantity + 1); // Increase quantity by 1
+    };
+
+    const handleDecreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1); 
+        }
+    };
+
+    const renderOptions = (attribute) => {
+        return attribute.options.map((option, index) => (
+            <label key={index}>
+                <input
+                    type="radio"
+                    name={attribute.name}
+                    value={option}
+                    onChange={() => handleOptionChange(attribute.name, option)}
+                    checked={selectedOptions[attribute.name] === option}
+                />
+                {option}
+            </label>
+        ));
+    };
+
+    const renderAttributes = () => {
+        return productDetail.attributes.map((attribute, index) => (
+            <div key={index}>
+                <p>{attribute.name}:</p>
+                {renderOptions(attribute)}
+            </div>
+        ));
+    };
+
+    if (isLoading) {
         return( 
-          <Loading/>
+            <Loading/>
         );
-      }
-    return ( 
+    }
+
+    return (
         <>
-        {productDetail.name}
+            <h1>{productDetail.name}</h1>
+            <p>£{productDetail.price}</p>
+            {renderAttributes()}
+            <div>
+                <button onClick={handleDecreaseQuantity}>-</button>
+                <span>{quantity}</span>
+                <button onClick={handleIncreaseQuantity}>+</button>
+            </div>
+            <button onClick={handleAddToCart}>Add to Cart</button>
         </>
-     );
+    );
 }
  
 export default Product;

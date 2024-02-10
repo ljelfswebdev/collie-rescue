@@ -13,6 +13,7 @@ module.exports = {
         "green":"#2BC342",
         "orange":"#E8984A",
         "pink":"#E27077",
+        "grey": "#B9B9B9",
 
         "text-title":"#3A3735",
         "text-body":"#6A6A6A",
