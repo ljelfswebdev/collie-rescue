@@ -9,11 +9,17 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
-    const storedCart = localStorage.getItem('cart');
-    return storedCart ? JSON.parse(storedCart) : [];
+    if (typeof window !== 'undefined') {
+      const storedCart = localStorage.getItem('cart');
+      return storedCart ? JSON.parse(storedCart) : [];
+    }
+    return [];
   });
+
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
   }, [cart]);
 
   const addToCart = (product) => {
@@ -59,7 +65,7 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         clearCart,
-        updateQuantity, // Include updateQuantity function in the context value
+        updateQuantity,
       }}
     >
       {children}

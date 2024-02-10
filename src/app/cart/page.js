@@ -39,8 +39,8 @@ const CartPage = () => {
                 <p>Colour: {item.identifier}</p> 
             )}
             <p>Total price: £{item.price * item.quantity}</p>
-            <button onClick={() => handleIncreaseQuantity(item.identifier)}>Increase Quantity</button> {/* Increase quantity button */}
-            <button onClick={() => handleDecreaseQuantity(item.identifier)}>Decrease Quantity</button> {/* Decrease quantity button */}
+            <button onClick={() => handleIncreaseQuantity(item.identifier)}>Increase Quantity</button>
+            <button onClick={() => handleDecreaseQuantity(item.identifier)}>Decrease Quantity</button>
             <button onClick={() => removeFromCart(item.identifier)}>Remove from Cart</button>
           </div>
         ))}
