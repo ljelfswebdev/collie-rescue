@@ -16,7 +16,7 @@ const Hero = ({ pageData }) => {
     <>
 
 {title && (
-  <h1 className="font-moch text-white font-bold text-4xl text-center max-w-lg mx-auto mb-10">
+  <h1 className="font-primary text-white font-bold text-4xl text-center max-w-lg mx-auto mb-10">
     {title}
   </h1>
 )}

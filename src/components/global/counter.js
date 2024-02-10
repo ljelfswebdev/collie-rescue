@@ -47,11 +47,11 @@ const CounterCard = ({ data }) => {
         <Image src={data.icon} alt={data.title} width={40} height={40} className="h-auto w-auto" />
       </div>
       <div className="flex flex-col gap-2">
-        <span className="font-moch text-4xl text-text-title">
+        <span className="font-primary text-4xl text-text-title">
           {count}
           {data.title === 'Collies Annually' && <span>+</span>}
         </span>
-        <span className="font-moch text-text-body">{data.title}</span>
+        <span className="font-primary text-text-body">{data.title}</span>
       </div>
     </div>
   );

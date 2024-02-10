@@ -109,12 +109,12 @@ const PostDetail = () => {
           <div className="flex flex-col items-center justify-center">
 
             {categoryName && (
-              <div className="mb-7 py-2 px-4 w-fit rounded bg-orange font-moch text-white">
+              <div className="mb-7 py-2 px-4 w-fit rounded bg-orange font-primary text-white">
                 {categoryName}
               </div>
             )}
            
-            <div className="mb-8 max-w-3xl mx-auto font-moch font-bold text-4xl text-center"
+            <div className="mb-8 max-w-3xl mx-auto font-primary font-bold text-4xl text-center"
             dangerouslySetInnerHTML={{ __html: postDetail.title.rendered }}> 
             </div>
             <div className="flex gap-2 items-center mb-12">
@@ -126,11 +126,11 @@ const PostDetail = () => {
                   className="min-w-4 min-h-4 max-w-4 max-h-4"
                 />
                 
-                <span className="font-sans text-text-body">
+                <span className="font-secondary text-text-body">
                   {formattedDate}
                 </span>
                 {postDetail.acf.author &&(
-                  <span className="font-sans text-orange">
+                  <span className="font-secondary text-orange">
                     By {postDetail.acf.author}
                   </span>
                 )}
@@ -157,7 +157,7 @@ const PostDetail = () => {
             <div key={index}>
 
             {block.text_or_image === 'Text' && (
-              <div className={`post-block font-sans text-text-body text-base ${block.block_background ? 'post-bg p-10 rounded-2xl' : ''}`}
+              <div className={`post-block font-secondary text-text-body text-base ${block.block_background ? 'post-bg p-10 rounded-2xl' : ''}`}
               style={{ backgroundColor: block.block_background }}
               dangerouslySetInnerHTML={{ __html: block.block_text }}
             />
@@ -173,7 +173,7 @@ const PostDetail = () => {
               />
              )}
               {block.text_or_image === 'Image' && block.block_photographer && (
-                <span className="font-sans text-text-body text-sm">
+                <span className="font-secondary text-text-body text-sm">
                  Photo courtesy of {block.block_photographer}
                 </span>
               )}
@@ -188,7 +188,7 @@ const PostDetail = () => {
       <section className="pb-16" id="Post-share">
         <div className="container container--post">
           <div className="flex flex-wrap gap-4 items-center">
-            <span className="font-moch text-2xl text-text-body">Tags</span>
+            <span className="font-primary text-2xl text-text-body">Tags</span>
             {tagsName.map((tag, index) => (
                 <Link href="/posts" as={`/posts?tagId=${tag.id}`} key={index} className="button button--orange">
                     {tag.name}
@@ -199,7 +199,7 @@ const PostDetail = () => {
       </section>
       <section className="py-16 bg-orange/20" id="Post-related">
         <div className="container">
-          <h2 className="font-moch text-4xl text-text-title text-center mb-10">
+          <h2 className="font-primary text-4xl text-text-title text-center mb-10">
             Related Posts
           </h2>
           <LatestNews relatedPosts={postDetail.acf.related_posts} />

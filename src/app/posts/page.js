@@ -132,12 +132,12 @@ const Posts = () => {
         <div className="grid gap-10 grid-cols-1 mlg:grid-cols-[1fr_380px]">
           <div className="flex flex-col gap-4">
             {/* {selectedTagName && (
-              <div className="font-moch text-xl font-bold text-text-title">
+              <div className="font-primary text-xl font-bold text-text-title">
                 {selectedTagName}
             </div>
             )} */}
             {searchQuery && (
-              <div className="font-moch text-xl font-bold text-text-title">
+              <div className="font-primary text-xl font-bold text-text-title">
                 {searchQuery}
             </div>
             )}
@@ -160,9 +160,9 @@ const Posts = () => {
             placeholder="Search"
             value={searchQuery}
             onChange={handleSearchChange}
-            className="border-2 border-text-title rounded px-4 py-2 mb-8 font-sans"
+            className="border-2 border-text-title rounded px-4 py-2 mb-8 font-secondary"
           />
-          <div className="font-moch text-blue mb-2">
+          <div className="font-primary text-blue mb-2">
             Tags
           </div>
           {tags &&
@@ -180,7 +180,7 @@ const Posts = () => {
               />
               <label
                 htmlFor={tag.id}
-                className={`cursor-pointer font-moch hover:text-text-title ${
+                className={`cursor-pointer font-primary hover:text-text-title ${
                   selectedTagId === tag.id ? 'text-green' : 'text-text-body'
                 }`}
               >

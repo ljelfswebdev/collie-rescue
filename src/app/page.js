@@ -69,7 +69,7 @@ const Homepage = () => {
           <div className="container">
             <div className="flex flex-col gap-10">
               {pageData.acf.latest_news_title && (
-                <h2 className="font-moch text-4xl text-text-title text-center">
+                <h2 className="font-primary text-4xl text-text-title text-center">
                   {pageData.acf.latest_news_title}
                 </h2>
               )}

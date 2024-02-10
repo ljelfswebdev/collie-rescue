@@ -8,16 +8,16 @@ const Banner = ({pageData}) => {
             <div className="container">
                 <div className="flex flex-col gap-4 justify-center items-center">
                     <div className="flex gap-2">
-                        <Link href="/" className="font-sans font-bold text-green">Home</Link>
+                        <Link href="/" className="font-secondary font-bold text-green">Home</Link>
                         {pageData.acf.breadcrumb && (
                         <>
-                            <span className="font-sans text-text-body">/</span>
-                            <span className="font-sans text-tex-title">{pageData.acf.breadcrumb}</span> 
+                            <span className="font-secondary text-text-body">/</span>
+                            <span className="font-secondary text-tex-title">{pageData.acf.breadcrumb}</span> 
                         </>
                            )} 
                     </div>
                     {pageData.acf.page_title && (
-                        <h1 className="font-moch font-bold text-4xl text-text-title text-center">{pageData.acf.page_title}</h1>
+                        <h1 className="font-primary font-bold text-4xl text-text-title text-center">{pageData.acf.page_title}</h1>
                     )}
                 </div>
             </div>
@@ -25,7 +25,7 @@ const Banner = ({pageData}) => {
         {pageData.acf.page_text && (
             <>
             <div className="container">
-                <div className="mb-12 font-sans text-text-body text-center max-w-3xl mx-auto"
+                <div className="mb-12 font-secondary text-text-body text-center max-w-3xl mx-auto"
                 dangerouslySetInnerHTML={{ __html: pageData.acf.page_text }}
                 >
                </div>     

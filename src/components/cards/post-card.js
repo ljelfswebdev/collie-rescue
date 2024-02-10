@@ -62,20 +62,20 @@ const PostCard = ({ post }) => {
 
       
       {categoryName && categoryName !== 'Uncategorized' && (
-        <div className="w-fit px-4 py-2 bg-black rounded-t-none rounded-b font-moch text-white mb-4">
+        <div className="w-fit px-4 py-2 bg-black rounded-t-none rounded-b font-primary text-white mb-4">
           {categoryName}
         </div>
       )}
-      <div className="font-moch text-text-title font-2xl max-w-xs mb-5"
+      <div className="font-primary text-text-title font-2xl max-w-xs mb-5"
        dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
 
       <div className="flex gap-2 items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path data-name="Path 2019" d="M7.25 3.75A.748.748 0 0 1 8 3a.748.748 0 0 1 .75.75V7.6l2.666 1.775a.724.724 0 0 1 .184 1.041.688.688 0 0 1-1.012.181l-3-2a.685.685 0 0 1-.334-.625ZM8 0a8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8ZM1.5 8A6.5 6.5 0 0 0 8 14.5 6.5 6.5 0 0 0 14.5 8 6.5 6.5 0 0 0 8 1.5 6.5 6.5 0 0 0 1.5 8Z" fill="#232120" opacity=".999"/></svg>
-        <span className="font-sans text-text-body">
+        <span className="font-secondary text-text-body">
           {formattedDate}
         </span>
         {post.acf.author &&(
-          <span className="font-sans text-orange">
+          <span className="font-secondary text-orange">
             By {post.acf.author}
           </span>
         )}

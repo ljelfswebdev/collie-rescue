@@ -42,7 +42,7 @@ const Header = () => {
         <header>
             <div className="bg-blue">
                 <div className="container">
-                    <div className="font-sans text-white text-base text-center py-4">
+                    <div className="font-secondary text-white text-base text-center py-4">
                         <span className="font-bold">"Listening Ear" Bereavement Service</span> <Link href="">See Rainbow Bridge</Link> for all details
                     </div>
                 </div>

@@ -11,19 +11,19 @@ const Mission = ({ pageData }) => {
     return ( 
         <div className="flex flex-col items-center justify-center">
             {sub && (
-               <span className="mb-2 px-3 py-2 bg-[#1f802f40] rounded text-white font-moch text-base">
+               <span className="mb-2 px-3 py-2 bg-[#1f802f40] rounded text-white font-primary text-base">
                     {sub}
                 </span> 
             )}
             {main_title &&(
-                <h2 className="mb-6 font-moch text-white text-4xl">
+                <h2 className="mb-6 font-primary text-white text-4xl">
                     {main_title}
                 </h2>
             )}
             {main_text && (
                 <div 
                     dangerouslySetInnerHTML={{ __html: main_text }} 
-                    className="font-sans text-text-body text-center text-base max-w-[912px] mx-auto mb-10"
+                    className="font-secondary text-text-body text-center text-base max-w-[912px] mx-auto mb-10"
                 />
             )}
         
@@ -54,10 +54,10 @@ const Mission = ({ pageData }) => {
                             />
                         </div>
                         <div className="relative z-20 px-12 flex flex-col items-center h-full justify-center">
-                            <div className="font-moch text-white text-3xl text-center mt-auto pt-8">
+                            <div className="font-primary text-white text-3xl text-center mt-auto pt-8">
                                 {mission.mission_text}
                             </div>
-                            <span className="font-moch text-white text-base text-center mt-auto pb-8">
+                            <span className="font-primary text-white text-base text-center mt-auto pb-8">
                                 {mission.mission_link_text}
                             </span>
                         </div>

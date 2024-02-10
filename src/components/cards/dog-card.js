@@ -30,8 +30,8 @@ const DogCard = ({ dog }) => {
           />
         )}
       </div>
-      <div className="font-bold font-moch text-2xl text-text-title mb-5" dangerouslySetInnerHTML={{ __html: dog.title.rendered }}></div>
-      <div className="text-center text-text-body font-sans mb-7" dangerouslySetInnerHTML={{ __html: displayText }} />
+      <div className="font-bold font-primary text-2xl text-text-title mb-5" dangerouslySetInnerHTML={{ __html: dog.title.rendered }}></div>
+      <div className="text-center text-text-body font-secondary mb-7" dangerouslySetInnerHTML={{ __html: displayText }} />
       <span className="button button--black">Read Story</span>
     </Link>
    );

@@ -19,8 +19,8 @@ module.exports = {
       },
 
       fontFamily: {
-        'moch': ["'Mochiy Pop One'"],
-        'sans': ["'DM Sans Variable'"],
+        'primary': ["'Mochiy Pop One'"],
+        'secondary': ["'DM Sans Variable'"],
       },
 
       screens: {

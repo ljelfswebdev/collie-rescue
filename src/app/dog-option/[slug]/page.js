@@ -99,7 +99,7 @@ useEffect(() => {
           </div>
           </div>
       ) : (
-        <p className="text-xl font-moch text-text-title">No dogs found for the given term.</p>
+        <p className="text-xl font-primary text-text-title">No dogs found for the given term.</p>
       )}
       
     </div>
