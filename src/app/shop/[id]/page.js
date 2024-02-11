@@ -9,6 +9,8 @@ import Image from "next/image";
 import Loading from '../../../components/global/loading';
 import { useCart } from '../../../utils/cartContext';
 import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+import "../../../styles/dropdown.css"
 
 const Product = () => {
     const pathname = usePathname();
@@ -23,6 +25,7 @@ const Product = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedOptions, setSelectedOptions] = useState({});
     const [quantity, setQuantity] = useState(1); 
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const { addToCart } = useCart();
 
@@ -65,9 +68,6 @@ const Product = () => {
         fetchProducts();
       }, [apiBaseUrl, consumerKey, consumerSecret]);
 
-    const handleOptionChange = (attributeName, optionValue) => {
-        setSelectedOptions({ ...selectedOptions, [attributeName]: optionValue });
-    };
 
     const handleAddToCart = () => {
         const identifier = JSON.stringify(selectedOptions);
@@ -85,52 +85,47 @@ const Product = () => {
         }
     };
 
-    const renderOptions = (attribute) => {
-        return attribute.options.map((option, index) => {
-            // Dynamically generate a class name based on the option value
-            const beforeBg = `before:bg-${option.toLowerCase()}`;
-    
-            return (
-            <div key={index}>
-                <input
-                        type="checkbox"
-                        name={attribute.name}
-                        value={option}
-                        onChange={() => handleOptionChange(attribute.name, option)}
-                        checked={selectedOptions[attribute.name] === option}
-                        id={option}
-                        hidden
-                        className="peer"
-                    />
-                   
-               <label 
-                    htmlFor={option} 
-                    className={`relative font-primary text-text-body flex flex-col justify-center items-center
-                                before:content-[''] before:relative before:h-12 before:w-12 before:rounded-full before:border before:border-solid before:border-grey
-                                before:bg-${option.toLowerCase()}
-                                peer-checked:before:border-4
-                    `}
-                >
-                    {option}
-                </label>
-
-            </div>
-            
-            );
-        });
+    const handleOptionChange = (attributeName, optionValue) => {
+        setSelectedOptions({ ...selectedOptions, [attributeName]: optionValue });
     };
 
-    
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setFormSubmitted(true);
+        const allDropdownsSelected = productDetail.attributes.every(attribute => 
+            selectedOptions[attribute.name]
+        );
+
+        if (allDropdownsSelected) {
+            handleAddToCart();
+        } else {
+
+            console.error("Please select options for all attributes.");
+        }
+    };
     const renderAttributes = () => {
         return productDetail.attributes.map((attribute, index) => (
             <div key={index} className="flex flex-col gap-2">
                 <p className="font-primary text-text-title text-base">{attribute.name}</p>
                 <div className="flex gap-8">
-                {renderOptions(attribute)}
+                    <Dropdown
+                        options={attribute.options}
+                        value={selectedOptions[attribute.name]}
+                        onChange={(option) => handleOptionChange(attribute.name, option.value)}
+                        className="w-full mb-4"
+                        required  // Mark dropdown as required
+                    />
                 </div>
+                {formSubmitted && !selectedOptions[attribute.name] && (
+                    <span className="text-red-500">Please select an option for this attribute.</span>
+                )}
             </div>
         ));
     };
+
+    
+
+    
 
     if (isLoading) {
         return( 
@@ -167,22 +162,28 @@ const Product = () => {
                         >
                         </span>
                     )}
+
+                    <span className="font-secondary text-2xl font-bold text-text-title mb-6">
+                        £{parseFloat(productDetail.price).toFixed(2)}
+                    </span>
+
+                    <form onSubmit={handleSubmit} >
+                        {renderAttributes()}
+                        <div className="flex gap-4 mt-2">
+                            <div className="h-[56px] w-40 rounded-xl border-2 border-blue border-solid flex justify-center items-center gap-4 ">
+                                <button  className="font-primary text-text-title font-bold text-sm" onClick={handleDecreaseQuantity}>-</button>
+                                <span className="font-primary text-text-title font-bold text-lg">{quantity}</span>
+                                <button className="font-primary text-text-title font-bold text-sm" onClick={handleIncreaseQuantity}>+</button>
+                            </div>
+                            <button type="submit" className="button button--black">Add to Cart</button>
+                        </div>
+                    </form>
                     
-                    {renderAttributes()}
-                    
+    
                     </div>
                 </div>
             </div>
         </section>
-            <h1>{productDetail.name}</h1>
-            <p>£{productDetail.price}</p>
-            {renderAttributes()}
-            <div>
-                <button onClick={handleDecreaseQuantity}>-</button>
-                <span>{quantity}</span>
-                <button onClick={handleIncreaseQuantity}>+</button>
-            </div>
-            <button onClick={handleAddToCart}>Add to Cart</button>
         </>
     );
 }
