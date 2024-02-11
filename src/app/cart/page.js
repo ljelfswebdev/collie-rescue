@@ -1,9 +1,27 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../../utils/cartContext';
+import Loading from '../../components/global/loading';
+import Banner from '../../components/global/banner';
+import { fetchPageData } from '../../utils/fetchPageData';
 
 const CartPage = () => {
+  const [pageData, setPageData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const slug = 'cart';
+    fetchPageData(slug)
+      .then((data) => {
+        setPageData(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log('Error fetching page data');
+      });
+  }, []);
+
+
   const { cart, addToCart, removeFromCart, clearCart, updateQuantity } = useCart(); // Added updateQuantity function
 
   const handleIncreaseQuantity = (identifier) => {
@@ -26,9 +44,15 @@ const CartPage = () => {
     }, 0);
   };
 
+  if (isLoading || !pageData) {
+    return( 
+        <Loading/>
+    );
+  }
+
   return (
     <div>
-      <h1>Cart Page</h1>
+      <Banner pageData={pageData}/>
       <ul>
         {cart.map(item => (
           <div key={`${item.id}-${item.identifier}`} className="mb-4">

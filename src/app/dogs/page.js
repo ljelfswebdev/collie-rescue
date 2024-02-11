@@ -7,6 +7,7 @@ import { fetchPageData } from '../../utils/fetchPageData';
 import { fetchDogs } from '../../utils/fetchDogs';
 import DogCard from '../../components/cards/dog-card';
 import Link from 'next/link';
+import Loading from '../../components/global/loading';
 
 const Dogs = () => {
   const apiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
@@ -57,12 +58,10 @@ const Dogs = () => {
   }, []);
 
 
-
   if (isLoading || !pageData) {
     return( 
-    <div className="loading">
-      <img src="/loading.gif"/>
-    </div> );
+        <Loading/>
+    );
   }
 
 
