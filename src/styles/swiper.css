@@ -42,3 +42,8 @@
 .news-slider .swiper-button-prev {
     background-color: #3A3735;
 }
+
+.related-slider .swiper-button-next,
+.related-slider .swiper-button-prev {
+    background-color: #3A3735;
+}

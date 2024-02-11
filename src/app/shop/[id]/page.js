@@ -10,7 +10,10 @@ import Loading from '../../../components/global/loading';
 import { useCart } from '../../../utils/cartContext';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import "../../../styles/dropdown.css"
+import "../../../styles/dropdown.css";
+import RelatedProducts from '../../../components/pages/product/related';
+import CartSuccess from '../../../components/pages/product/cart-success';
+import CartFailure from '../../../components/pages/product/cart-failure';
 
 const Product = () => {
     const pathname = usePathname();
@@ -22,58 +25,98 @@ const Product = () => {
     const consumerSecret = process.env.NEXT_PUBLIC_WOO_SECRET;
   
     const [productDetail, setProductDetail] = useState(null);
+    // const [productReviews, setProductReviews] = useState(null);
+    const [relatedProducts, setRelatedProducts] = useState(null);
+    
+
     const [isLoading, setIsLoading] = useState(true);
     const [selectedOptions, setSelectedOptions] = useState({});
     const [quantity, setQuantity] = useState(1); 
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const { addToCart } = useCart();
-
-    // console.log(productDetail);
+    const [isSuccess, setIsSuccess] = useState(null);
 
     useEffect(() => {
-        const oauth = OAuth({
-          consumer: { key: consumerKey, secret: consumerSecret },
-          signature_method: "HMAC-SHA1",
-          hash_function: (base_string, key) => {
-            return crypto
-              .createHmac("sha1", key)
-              .update(base_string)
-              .digest("base64");
-          },
-        });
+        const fetchProductAndRelated = async () => {
+            try {
+                const oauth = OAuth({
+                    consumer: { key: consumerKey, secret: consumerSecret },
+                    signature_method: "HMAC-SHA1",
+                    hash_function: (base_string, key) => {
+                        return crypto
+                            .createHmac("sha1", key)
+                            .update(base_string)
+                            .digest("base64");
+                    },
+                });
     
-        const requestData = {
-          url: `${apiBaseUrl}/products/${id}`,
-          method: "GET",
+                // Fetch product details
+                const productRequestData = {
+                    url: `${apiBaseUrl}/products/${id}`,
+                    method: "GET",
+                };
+    
+                const productResponse = await axios.get(productRequestData.url, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                    params: oauth.authorize(productRequestData),
+                });
+    
+                const fetchedProduct = productResponse.data;
+                setProductDetail(fetchedProduct);
+    
+                // Filter related products based on the current product's upsell_ids
+                if (fetchedProduct.upsell_ids && fetchedProduct.upsell_ids.length > 0) {
+                    const relatedRequestData = {
+                        url: `${apiBaseUrl}/products`,
+                        method: "GET",
+                        params: {
+                            include: fetchedProduct.upsell_ids.join(','),
+                        },
+                    };
+    
+                    const relatedResponse = await axios.get(relatedRequestData.url, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Accept: "application/json",
+                        },
+                        params: oauth.authorize(relatedRequestData),
+                    });
+    
+                    const fetchedRelatedProducts = relatedResponse.data.filter(product => fetchedProduct.upsell_ids.includes(product.id));
+                    setRelatedProducts(fetchedRelatedProducts);
+                } else {
+                    setRelatedProducts([]);
+                }
+    
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Error fetching product details and related products:", error);
+                setIsLoading(false);
+            }
         };
     
-        const fetchProducts = async () => {
-          try {
-            const response = await axios.get(requestData.url, {
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-              params: oauth.authorize(requestData),
-            });
-            const fetchedProduct = response.data;
-            setProductDetail(fetchedProduct);
-            setIsLoading(false);
-          } catch (error) {
-            console.error("Error fetching Products:", error);
-            setIsLoading(false);
-          }
-        };
-        fetchProducts();
-      }, [apiBaseUrl, consumerKey, consumerSecret]);
+        fetchProductAndRelated();
+    }, [id, apiBaseUrl, consumerKey, consumerSecret]);
+    
+    
 
+    // const handleAddToCart = () => {
+    //     const identifier = JSON.stringify(selectedOptions);
+    //     const productWithOptions = { ...productDetail, selectedOptions, identifier, quantity }; // Include quantity in productWithOptions
+    //     addToCart(productWithOptions);
+    // };
 
     const handleAddToCart = () => {
         const identifier = JSON.stringify(selectedOptions);
         const productWithOptions = { ...productDetail, selectedOptions, identifier, quantity }; // Include quantity in productWithOptions
-        addToCart(productWithOptions);
+        addToCart(productWithOptions); // Update cart state
+        setIsSuccess(true); // Set isSuccess to true as the product is successfully added to the cart
     };
+    
 
     const handleIncreaseQuantity = () => {
         setQuantity(quantity + 1); // Increase quantity by 1
@@ -103,6 +146,7 @@ const Product = () => {
             console.error("Please select options for all attributes.");
         }
     };
+
     const renderAttributes = () => {
         return productDetail.attributes.map((attribute, index) => (
             <div key={index} className="flex flex-col gap-2">
@@ -113,7 +157,7 @@ const Product = () => {
                         value={selectedOptions[attribute.name]}
                         onChange={(option) => handleOptionChange(attribute.name, option.value)}
                         className="w-full mb-4"
-                        required  // Mark dropdown as required
+                        required 
                     />
                 </div>
                 {formSubmitted && !selectedOptions[attribute.name] && (
@@ -135,6 +179,8 @@ const Product = () => {
 
     return (
         <>
+        {isSuccess === true && <CartSuccess />}
+        {isSuccess === false && <CartFailure />}
         <section className="py-10" id="Product-info">
             <div className="container">
                 <div className="grid grid-cols-1 gap-10 mlg:grid-cols-2">
@@ -158,7 +204,7 @@ const Product = () => {
                     </h2>
                     {productDetail.description && (
                         <span className="font-secondary text-text-body mb-6" 
-                        dangerouslySetInnerHTML={{ __html: productDetail.description }}
+                        dangerouslySetInnerHTML={{ __html: productDetail.short_description }}
                         >
                         </span>
                     )}
@@ -171,9 +217,9 @@ const Product = () => {
                         {renderAttributes()}
                         <div className="flex gap-4 mt-2">
                             <div className="h-[56px] w-40 rounded-xl border-2 border-blue border-solid flex justify-center items-center gap-4 ">
-                                <button  className="font-primary text-text-title font-bold text-sm" onClick={handleDecreaseQuantity}>-</button>
+                                <div  className="font-primary text-text-title font-bold text-sm" onClick={handleDecreaseQuantity}>-</div>
                                 <span className="font-primary text-text-title font-bold text-lg">{quantity}</span>
-                                <button className="font-primary text-text-title font-bold text-sm" onClick={handleIncreaseQuantity}>+</button>
+                                <div className="font-primary text-text-title font-bold text-sm" onClick={handleIncreaseQuantity}>+</div>
                             </div>
                             <button type="submit" className="button button--black">Add to Cart</button>
                         </div>
@@ -184,6 +230,31 @@ const Product = () => {
                 </div>
             </div>
         </section>
+
+        <section className="py-10" id="Product-lower">
+            <div className="container">
+                <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-4">
+                   
+                    <input type="radio" name="product-detail-tabs" id="description" value="description" className="peer/description" hidden defaultChecked/>
+                    <label htmlFor='description' className="text-2xl font-primary text-text-title font-bold cursor-pointer peer-checked/description:text-green">Description</label>
+                    <div className="hidden w-full order-10 mt-4 peer-checked/description:flex">
+                        {productDetail.description && (
+                            <div className="font-secondary text-text-body text-base" dangerouslySetInnerHTML={{ __html: productDetail.description }}>
+
+                            </div>
+                        )}
+                    </div>
+
+                    <input type="radio" name="product-detail-tabs" id="reviews" value="reviews" className="peer/reviews" hidden/>
+                    <label htmlFor='reviews' className="text-2xl font-primary text-text-title font-bold cursor-pointer peer-checked/reviews:text-green">Reviews</label>
+                    <div className="hidden w-full order-10 mt-4 peer-checked/reviews:flex">
+                         Reviews here
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <RelatedProducts relatedProducts={relatedProducts} />
         </>
     );
 }

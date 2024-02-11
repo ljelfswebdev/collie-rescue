@@ -22,24 +22,46 @@ export const CartProvider = ({ children }) => {
     }
   }, [cart]);
 
+  // const addToCart = (product) => {
+  //   const existingProductIndex = cart.findIndex(item => item.id === product.id && item.identifier === product.identifier);
+
+  //   if (existingProductIndex !== -1) {
+  //     const updatedCart = cart.map((item, index) => {
+  //       if (index === existingProductIndex) {
+  //         return {
+  //           ...item,
+  //           quantity: item.quantity + product.quantity,
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //     setCart(updatedCart);
+  //   } else {
+  //     setCart([...cart, product]);
+  //   }
+  // };
+
   const addToCart = (product) => {
     const existingProductIndex = cart.findIndex(item => item.id === product.id && item.identifier === product.identifier);
 
     if (existingProductIndex !== -1) {
-      const updatedCart = cart.map((item, index) => {
-        if (index === existingProductIndex) {
-          return {
-            ...item,
-            quantity: item.quantity + product.quantity,
-          };
-        }
-        return item;
-      });
-      setCart(updatedCart);
+        const updatedCart = cart.map((item, index) => {
+            if (index === existingProductIndex) {
+                return {
+                    ...item,
+                    quantity: item.quantity + product.quantity,
+                };
+            }
+            return item;
+        });
+        setCart(updatedCart);
     } else {
-      setCart([...cart, product]);
+        setCart([...cart, product]);
     }
-  };
+};
+
+
+
 
   const removeFromCart = (productId) => {
     setCart(cart.filter(item => item.identifier !== productId));
