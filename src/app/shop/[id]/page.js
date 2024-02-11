@@ -168,7 +168,9 @@ const Product = () => {
     };
 
     
-
+    const handleClosePopup = () => {
+        setIsSuccess(null);
+    };
     
 
     if (isLoading) {
@@ -179,8 +181,8 @@ const Product = () => {
 
     return (
         <>
-        {isSuccess === true && <CartSuccess />}
-        {isSuccess === false && <CartFailure />}
+        {isSuccess === true && <CartSuccess onClosePopup={handleClosePopup}/>}
+        {isSuccess === false && <CartFailure  onClosePopup={handleClosePopup}/>}
         <section className="py-10" id="Product-info">
             <div className="container">
                 <div className="grid grid-cols-1 gap-10 mlg:grid-cols-2">
@@ -217,9 +219,9 @@ const Product = () => {
                         {renderAttributes()}
                         <div className="flex gap-4 mt-2">
                             <div className="h-[56px] w-40 rounded-xl border-2 border-blue border-solid flex justify-center items-center gap-4 ">
-                                <div  className="font-primary text-text-title font-bold text-sm" onClick={handleDecreaseQuantity}>-</div>
+                                <div  className="font-primary text-text-title font-bold text-sm cursor-pointer" onClick={handleDecreaseQuantity}>-</div>
                                 <span className="font-primary text-text-title font-bold text-lg">{quantity}</span>
-                                <div className="font-primary text-text-title font-bold text-sm" onClick={handleIncreaseQuantity}>+</div>
+                                <div className="font-primary text-text-title font-bold text-sm cursor-pointer" onClick={handleIncreaseQuantity}>+</div>
                             </div>
                             <button type="submit" className="button button--black">Add to Cart</button>
                         </div>

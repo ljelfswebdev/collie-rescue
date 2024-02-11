@@ -48,3 +48,12 @@
     color: #2bc342;
     background-color: #fff;
 }
+
+.button--blue{
+    background-color:#138AC9;  
+    border-color: #138AC9; 
+}
+.button--blue:hover{
+    color: #138AC9;
+    background-color: #fff;
+}
