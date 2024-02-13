@@ -2,7 +2,7 @@
 // next.config.js
 const nextConfig = {
     images: {
-      domains: ['localhost'],
+      domains: ['localhost', 'collie-rescue.local'],
     },
   };
 export default nextConfig;

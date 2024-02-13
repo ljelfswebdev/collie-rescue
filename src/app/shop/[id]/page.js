@@ -25,10 +25,10 @@ const Product = () => {
     const consumerSecret = process.env.NEXT_PUBLIC_WOO_SECRET;
   
     const [productDetail, setProductDetail] = useState(null);
-    // const [productReviews, setProductReviews] = useState(null);
+    const [productReviews, setProductReviews] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState(null);
     
-
+    console.log(productReviews);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedOptions, setSelectedOptions] = useState({});
     const [quantity, setQuantity] = useState(1); 
@@ -51,7 +51,6 @@ const Product = () => {
                     },
                 });
     
-                // Fetch product details
                 const productRequestData = {
                     url: `${apiBaseUrl}/products/${id}`,
                     method: "GET",
@@ -68,7 +67,6 @@ const Product = () => {
                 const fetchedProduct = productResponse.data;
                 setProductDetail(fetchedProduct);
     
-                // Filter related products based on the current product's upsell_ids
                 if (fetchedProduct.upsell_ids && fetchedProduct.upsell_ids.length > 0) {
                     const relatedRequestData = {
                         url: `${apiBaseUrl}/products`,
@@ -91,6 +89,36 @@ const Product = () => {
                 } else {
                     setRelatedProducts([]);
                 }
+
+                //reviews
+                if (id) {
+
+                    const relatedReviewData = {
+                        url: `${apiBaseUrl}/products/reviews`,
+                        method: "GET",
+                        params: {
+                            status: 'all',
+                        //    product: [id]
+                        },
+                    };
+
+                    // console.log(relatedReviewData)
+    
+                    const fetchedReviewProducts = await axios.get(relatedReviewData.url, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Accept: "application/json",
+                        },
+                        params: oauth.authorize(relatedReviewData),
+                    });
+                
+    
+                
+                    setProductReviews(fetchedReviewProducts);
+                } else {
+                    setProductReviews([]);
+                }
+    
     
                 setIsLoading(false);
             } catch (error) {
@@ -103,12 +131,6 @@ const Product = () => {
     }, [id, apiBaseUrl, consumerKey, consumerSecret]);
     
     
-
-    // const handleAddToCart = () => {
-    //     const identifier = JSON.stringify(selectedOptions);
-    //     const productWithOptions = { ...productDetail, selectedOptions, identifier, quantity }; // Include quantity in productWithOptions
-    //     addToCart(productWithOptions);
-    // };
 
     const handleAddToCart = () => {
         const identifier = JSON.stringify(selectedOptions);
