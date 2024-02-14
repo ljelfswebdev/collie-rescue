@@ -96,7 +96,7 @@ const MobileHeader = ({dogTerms}) => {
                             <ul className="flex flex-col gap-2 items-center">
                             {dogTerms.map((term) => (
                                 <li key={term.id} className="font-normal text-center hover:font-bold">
-                                <Link href={`dog-option/${term.slug}`} className="flex text-center"  onClick={handleLinkClick}>     
+                                <Link href={`/dog-option/${term.slug}`} className="flex text-center"  onClick={handleLinkClick}>     
                                     {term.acf.page_title}
                                 </Link>
                                 </li>

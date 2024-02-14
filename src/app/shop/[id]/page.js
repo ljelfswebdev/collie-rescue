@@ -71,7 +71,7 @@ const Product = () => {
                     const relatedRequestData = {
                         url: `${apiBaseUrl}/products`,
                         method: "GET",
-                        params: {
+                        data: {
                             include: fetchedProduct.upsell_ids.join(','),
                         },
                     };
@@ -84,7 +84,8 @@ const Product = () => {
                         params: oauth.authorize(relatedRequestData),
                     });
     
-                    const fetchedRelatedProducts = relatedResponse.data.filter(product => fetchedProduct.upsell_ids.includes(product.id));
+                    const fetchedRelatedProducts = relatedResponse.data
+                    // .filter(product => fetchedProduct.upsell_ids.includes(product.id));
                     setRelatedProducts(fetchedRelatedProducts);
                 } else {
                     setRelatedProducts([]);
@@ -96,10 +97,9 @@ const Product = () => {
                     const relatedReviewData = {
                         url: `${apiBaseUrl}/products/reviews`,
                         method: "GET",
-                        params: {
-                            status: 'all',
-                        //    product: [id]
-                        },
+                        data: {
+                            product: id
+                        }
                     };
 
                     // console.log(relatedReviewData)

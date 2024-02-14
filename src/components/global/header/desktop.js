@@ -35,7 +35,7 @@ const DesktopHeader = ({ dogTerms }) => {
                             <ul className="flex flex-col gap-2">
                             {dogTerms.map((term) => (
                                 <li key={term.id} className="font-normal hover:font-bold">
-                                <Link href={`dog-option/${term.slug}`}>    
+                                <Link href={`/dog-option/${term.slug}`}>    
                                     {term.acf.page_title}
                                 </Link>
                                 </li>
