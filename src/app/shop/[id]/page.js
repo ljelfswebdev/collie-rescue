@@ -27,8 +27,7 @@ const Product = () => {
     const [productDetail, setProductDetail] = useState(null);
     const [productReviews, setProductReviews] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState(null);
-    
-    console.log(productReviews);
+
     const [isLoading, setIsLoading] = useState(true);
     const [selectedOptions, setSelectedOptions] = useState({});
     const [quantity, setQuantity] = useState(1); 
@@ -189,11 +188,84 @@ const Product = () => {
         ));
     };
 
+    const formattedDate = (dateString) => {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options);
+    };
     
     const handleClosePopup = () => {
         setIsSuccess(null);
     };
     
+
+    const [formData, setFormData] = useState({
+        reviewer: '',
+        reviewer_email: '',
+        review: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+
+
+const handleSubmitReview = async (e) => {
+    e.preventDefault();
+
+    try {
+        const oauth = OAuth({
+            consumer: { key: consumerKey, secret: consumerSecret },
+            signature_method: "HMAC-SHA1",
+            hash_function: (base_string, key) => {
+                return crypto
+                    .createHmac("sha1", key)
+                    .update(base_string)
+                    .digest("base64");
+            },
+        });
+
+        // Gather form data
+        const formData = new FormData(e.target);
+        const reviewer = formData.get('reviewer');
+        const reviewer_email = formData.get('reviewer_email');
+        const review_text = formData.get('review_text');
+
+        // Construct request data
+        const reviewData = {
+            url: `${apiBaseUrl}/products/reviews`,
+            method: "POST",
+            data: {
+                product_id: id,
+                reviewer: reviewer,
+                reviewer_email: reviewer_email,
+                review: review_text,
+            },
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                ...oauth.toHeader(oauth.authorize({
+                    url: `${apiBaseUrl}/products/reviews`,
+                    method: "POST",
+                })),
+            },
+        };
+
+        const review = await axios(reviewData);
+
+        console.log('Review submitted successfully:', review.data);
+    } catch (error) {
+        console.error("Error sending review:", error);
+    }
+};
+
+    
+
 
     if (isLoading) {
         return( 
@@ -271,8 +343,33 @@ const Product = () => {
 
                     <input type="radio" name="product-detail-tabs" id="reviews" value="reviews" className="peer/reviews" hidden/>
                     <label htmlFor='reviews' className="text-2xl font-primary text-text-title font-bold cursor-pointer peer-checked/reviews:text-green">Reviews</label>
-                    <div className="hidden w-full order-10 mt-4 peer-checked/reviews:flex">
-                         Reviews here
+                    <div className="hidden w-full flex-col gap-4 order-10 mt-4 peer-checked/reviews:flex">
+                    {productReviews.data.map((review, index) => (
+                        <div key={index} className="flex flex-col gap-2 border border-solid border-grey rounded-xl p-10">
+                            <span className="font-primary font-bold text-lg text-text-title">
+                               {review.reviewer}
+                            </span>
+                            <span className="font-secondary text-base text-text-body"
+                            dangerouslySetInnerHTML={{ __html: review.review }}>
+                            </span>
+                            <span  className="font-primary font-bold text-sm text-text-title">
+                                {formattedDate(review.date_created)}
+                            </span>
+                        </div>
+                    ))}
+                    <input type="checkbox" name="leaveReview" id="leaveReview" value="leaveReview" className="peer/leave" hidden/>
+                    <label htmlFor='leaveReview' className='button button--blue'>Leave Review</label>
+                    <div className="hidden w-full flex-col gap-2 border border-solid border-grey rounded-xl p-10 peer-checked/leave:flex">
+                    <form onSubmit={handleSubmitReview}>
+                        <label htmlFor='review_reviewer'>Your Name</label>
+                        <input type="text" name="reviewer" value={formData.reviewer} onChange={handleChange} />
+                        <label htmlFor='review_email'>Your Email</label>
+                        <input type="email" name="reviewer_email" value={formData.reviewer_email} onChange={handleChange} />
+                        <label htmlFor='review_review'>Your Review</label>
+                        <textarea name="review_text" value={formData.review_text} onChange={handleChange}></textarea>
+                        <button type="submit" className="button button--orange">Send Review</button>
+                    </form>
+                    </div>
                     </div>
                 </div>
             </div>
