@@ -245,6 +245,7 @@ const handleSubmitReview = async (e) => {
                 reviewer: reviewer,
                 reviewer_email: reviewer_email,
                 review: review_text,
+                verfified : false
             },
             headers: {
                 "Content-Type": "application/json",

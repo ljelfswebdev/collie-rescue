@@ -2,16 +2,63 @@
 
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../utils/cartContext';
+import axios from "axios";
+import OAuth from "oauth-1.0a";
+import crypto from "crypto";
 import Loading from '../../components/global/loading';
 import Banner from '../../components/global/banner';
 import { fetchPageData } from '../../utils/fetchPageData';
 import CartCardDesktop from '../../components/pages/cart/cart-card-desktop';
 import CartCardMobile from '../../components/pages/cart/cart-card-mobile';
 import Link from 'next/link';
+import debounce from 'lodash/debounce';
+
+
+
 
 const CartPage = () => {
   const [pageData, setPageData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_WOO_API;
+  const consumerKey = process.env.NEXT_PUBLIC_WOO_KEY;
+  const consumerSecret = process.env.NEXT_PUBLIC_WOO_SECRET;
+
+  const [formData, setFormData] = useState({
+    payment_method: "",
+    payment_method_title: "",
+    set_paid: false,
+    billing: {
+      first_name: "",
+      last_name: "",
+      address_1: "",
+      address_2: "",
+      city: "",
+      state: "",
+      postcode: "",
+      country: "",
+      email: "",
+      phone: ""
+    },
+    shipping: {
+      first_name: "",
+      last_name: "",
+      address_1: "",
+      address_2: "",
+      city: "",
+      state: "",
+      postcode: "",
+      country: ""
+    },
+    shippingSameAsBilling: false,
+    shipping_lines: [
+      {
+        method_id: "",
+        method_title: "",
+        total: ""
+      }
+    ]
+  });
+
 
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
 
@@ -43,6 +90,12 @@ const CartPage = () => {
 
   const { cart, addToCart, removeFromCart, clearCart, updateQuantity } = useCart(); 
 
+  const lineItems = cart.map(item => ({
+    product_id: item.id,
+    quantity: item.quantity,
+    ...(item.variation_id && { variation_id: item.variation_id }) // Include variation_id if available
+  }));
+
   const handleIncreaseQuantity = (identifier) => {
     updateQuantity(identifier, 1); 
   };
@@ -62,6 +115,175 @@ const CartPage = () => {
       return total + (item.price * item.quantity);
     }, 0);
   };
+
+
+  // const handleSubmitCart = async (e) => {
+
+  //   try {
+  //       const oauth = OAuth({
+  //           consumer: { key: consumerKey, secret: consumerSecret },
+  //           signature_method: "HMAC-SHA1",
+  //           hash_function: (base_string, key) => {
+  //               return crypto
+  //                   .createHmac("sha1", key)
+  //                   .update(base_string)
+  //                   .digest("base64");
+  //           },
+  //       });
+  //       const orderData = {
+  //           url: `${apiBaseUrl}/orders`,
+  //           method: "POST",
+  //           data: {
+  //             payment_method: "",
+  //             payment_method_title: "",
+  //             set_paid: true,
+  //             billing: {
+  //               first_name: "",
+  //               last_name: "",
+  //               address_1: "",
+  //               address_2: "",
+  //               city: "",
+  //               state: "",
+  //               postcode: "",
+  //               country: "",
+  //               email: "",
+  //               phone: ""
+  //             },
+  //             shipping: {
+  //               first_name: "",
+  //               last_name: "",
+  //               address_1: "",
+  //               address_2: "",
+  //               city: "",
+  //               state: "",
+  //               postcode: "",
+  //               country: ""
+  //             },
+  //             line_items: [
+  //               {
+  //                 product_id: 278,
+  //                 quantity: 2
+  //               },
+  //               {
+  //                 product_id: 268,
+  //                 variation_id: 23,
+  //                 quantity: 1
+  //               }
+  //             ],
+  //             shipping_lines: [
+  //               {
+  //                 method_id: "",
+  //                 method_title: "",
+  //                 total: ""
+  //               }
+  //             ]
+  //           },
+  //           headers: {
+  //               "Content-Type": "application/json",
+  //               Accept: "application/json",
+  //               ...oauth.toHeader(oauth.authorize({
+  //                   url: `${apiBaseUrl}/orders`,
+  //                   method: "POST",
+  //               })),
+  //           },
+  //       };
+
+  //       const order = await axios(orderData);
+
+  //       console.log('Order submitted successfully:', order.data);
+  //   } catch (error) {
+  //       console.error("Error sending order:", error);
+  //   }
+  // };
+
+  const displayCheckout = () => {
+    const checkoutSection = document.getElementById('checkout');
+    checkoutSection.style.display = 'flex';
+    checkoutSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+const debouncedHandleChange = debounce((name, value) => {
+  setFormData(prevFormData => ({
+    ...prevFormData,
+    [name]: value
+  }));
+}, 10000);
+
+const handleChange = (e) => {
+  e.preventDefault();
+  const { name, value } = e.target;
+  debouncedHandleChange(name, value);
+};
+  
+
+  
+  
+  const handleCheckboxChange = (e) => {
+    const { checked } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      shippingSameAsBilling: checked,
+      shipping: checked ? { ...prevFormData.billing } : { ...prevFormData.shipping },
+    }));
+  };
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const oauth = OAuth({
+        consumer: { key: consumerKey, secret: consumerSecret },
+        signature_method: "HMAC-SHA1",
+        hash_function: (base_string, key) => {
+          return crypto
+            .createHmac("sha1", key)
+            .update(base_string)
+            .digest("base64");
+        },
+      });
+
+      const orderData = {
+        url: `${apiBaseUrl}/orders`,
+        method: "POST",
+        data: {
+          ...formData,
+          line_items: lineItems
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          ...oauth.toHeader(oauth.authorize({
+            url: `${apiBaseUrl}/orders`,
+            method: "POST",
+          })),
+        },
+      };
+
+      const order = await axios(orderData);
+      
+
+      console.log('Order submitted successfully:', order.data);
+    } catch (error) {
+      console.error("Error sending order:", error);
+    }
+  };
+
+  const InputField = ({ label, name, value, onChange }) => (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={name} className="font-primary text-xl text-text-title">
+        {label}
+      </label>
+      <input
+        className="border border-solid border-grey rounded-xl px-4 h-12"
+        type="text"
+        name={name}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+
+
 
   if (isLoading || !pageData) {
     return( 
@@ -115,12 +337,159 @@ const CartPage = () => {
             <div className="font-primary text-xl text-text-title">
               Total to Pay - £{calculateTotalCartPrice().toFixed(2)}
             </div>
-            <Link href="" className="button button--black w-60">Proceed To Payment</Link>
+            <button className="button button--black w-60" onClick={() => displayCheckout()}>Proceed To Payment</button>
             
             <div className="font-primary text-xl text-text-title">
             <button className="button button--pink !w-60" onClick={() => clearCart()}>Clear Cart</button>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="hidden pb-20" id="checkout">
+        <div className="container">
+        <form onSubmit={handleSubmit} className="flex flex-col">
+        <InputField
+          label="Payment Method"
+          name="payment_method"
+          value={formData.payment_method}
+          onChange={handleChange}
+        />
+          
+          <fieldset>
+            <legend  className="text-3xl text-text-title mb-4">Billing Details</legend>
+            <InputField
+              label="First Name"
+              name="billing_first_name"
+              value={formData.billing_first_name}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Last Name"
+              name="billing_last_name"
+              value={formData.billing_last_name}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Address Line 1"
+              name="billing_address_1"
+              value={formData.billing_address_1}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Address Line 2"
+              name="billing_address_2"
+              value={formData.billing_address_2}
+              onChange={handleChange}
+            />
+            <InputField
+              label="City"
+              name="billing_city"
+              value={formData.billing_city}
+              onChange={handleChange}
+            />
+            <InputField
+              label="State"
+              name="billing_state"
+              value={formData.billing_state}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Postcode"
+              name="billing_postcode"
+              value={formData.billing_postcode}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Country"
+              name="billing_country"
+              value={formData.billing_country}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Email"
+              name="billing_email"
+              value={formData.billing_email}
+              onChange={handleChange}
+            />
+            <InputField
+              label="Phone"
+              name="billing_phone"
+              value={formData.billing_phone}
+              onChange={handleChange}
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend className="text-3xl text-text-title mb-4">Shipping Details</legend>
+            <label>
+              <input
+                type="checkbox"
+                name="shippingSameAsBilling"
+                checked={formData.shippingSameAsBilling}
+                onChange={handleCheckboxChange}
+              />
+              Same as Billing
+            </label>
+            {/* Shipping input fields */}
+            {formData.shippingSameAsBilling ? null : (
+              <fieldset>
+                <legend className="text-3xl text-text-title mb-4">Shipping Details</legend>
+                <InputField
+                  label="First Name"
+                  name="shipping_first_name"
+                  value={formData.shipping_first_name}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Last Name"
+                  name="shipping_last_name"
+                  value={formData.shipping_last_name}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Address Line 1"
+                  name="shipping_address_1"
+                  value={formData.shipping_address_1}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Address Line 2"
+                  name="shipping_address_2"
+                  value={formData.shipping_address_2}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="City"
+                  name="shipping_city"
+                  value={formData.shipping_city}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="State"
+                  name="shipping_state"
+                  value={formData.shipping_state}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Postcode"
+                  name="shipping_postcode"
+                  value={formData.shipping_postcode}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Country"
+                  name="shipping_country"
+                  value={formData.shipping_country}
+                  onChange={handleChange}
+                />
+              </fieldset>
+            )}
+          </fieldset>
+
+
+          <button type="submit">Submit</button>
+        </form>
+
         </div>
       </section>
     </>

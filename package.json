@@ -13,6 +13,7 @@
     "@fontsource/mochiy-pop-one": "^5.0.17",
     "@woocommerce/woocommerce-rest-api": "^1.0.1",
     "axios": "^1.6.7",
+    "lodash": "^4.17.21",
     "next": "14.1.0",
     "oauth-1.0a": "^2.2.6",
     "react": "^18",
