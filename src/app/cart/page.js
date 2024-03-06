@@ -24,39 +24,18 @@ const CartPage = () => {
   const consumerSecret = process.env.NEXT_PUBLIC_WOO_SECRET;
 
   const [formData, setFormData] = useState({
-    payment_method: "",
-    payment_method_title: "",
-    set_paid: false,
-    billing: {
-      first_name: "",
-      last_name: "",
-      address_1: "",
-      address_2: "",
-      city: "",
-      state: "",
-      postcode: "",
-      country: "",
-      email: "",
-      phone: ""
-    },
-    shipping: {
-      first_name: "",
-      last_name: "",
-      address_1: "",
-      address_2: "",
-      city: "",
-      state: "",
-      postcode: "",
-      country: ""
-    },
-    shippingSameAsBilling: false,
-    shipping_lines: [
-      {
-        method_id: "",
-        method_title: "",
-        total: ""
-      }
-    ]
+    firstName: '',
+    lastName: '',
+    address1: '',
+    address2: '',
+    city: '',
+    country: '',
+    state: '',
+    postcode: '',
+    email: '',
+    phone: '',
+    company: '',
+    errors: null
   });
 
 
@@ -117,119 +96,9 @@ const CartPage = () => {
   };
 
 
-  // const handleSubmitCart = async (e) => {
-
-  //   try {
-  //       const oauth = OAuth({
-  //           consumer: { key: consumerKey, secret: consumerSecret },
-  //           signature_method: "HMAC-SHA1",
-  //           hash_function: (base_string, key) => {
-  //               return crypto
-  //                   .createHmac("sha1", key)
-  //                   .update(base_string)
-  //                   .digest("base64");
-  //           },
-  //       });
-  //       const orderData = {
-  //           url: `${apiBaseUrl}/orders`,
-  //           method: "POST",
-  //           data: {
-  //             payment_method: "",
-  //             payment_method_title: "",
-  //             set_paid: true,
-  //             billing: {
-  //               first_name: "",
-  //               last_name: "",
-  //               address_1: "",
-  //               address_2: "",
-  //               city: "",
-  //               state: "",
-  //               postcode: "",
-  //               country: "",
-  //               email: "",
-  //               phone: ""
-  //             },
-  //             shipping: {
-  //               first_name: "",
-  //               last_name: "",
-  //               address_1: "",
-  //               address_2: "",
-  //               city: "",
-  //               state: "",
-  //               postcode: "",
-  //               country: ""
-  //             },
-  //             line_items: [
-  //               {
-  //                 product_id: 278,
-  //                 quantity: 2
-  //               },
-  //               {
-  //                 product_id: 268,
-  //                 variation_id: 23,
-  //                 quantity: 1
-  //               }
-  //             ],
-  //             shipping_lines: [
-  //               {
-  //                 method_id: "",
-  //                 method_title: "",
-  //                 total: ""
-  //               }
-  //             ]
-  //           },
-  //           headers: {
-  //               "Content-Type": "application/json",
-  //               Accept: "application/json",
-  //               ...oauth.toHeader(oauth.authorize({
-  //                   url: `${apiBaseUrl}/orders`,
-  //                   method: "POST",
-  //               })),
-  //           },
-  //       };
-
-  //       const order = await axios(orderData);
-
-  //       console.log('Order submitted successfully:', order.data);
-  //   } catch (error) {
-  //       console.error("Error sending order:", error);
-  //   }
-  // };
-
-  const displayCheckout = () => {
-    const checkoutSection = document.getElementById('checkout');
-    checkoutSection.style.display = 'flex';
-    checkoutSection.scrollIntoView({ behavior: 'smooth' });
-  }
-
-const debouncedHandleChange = debounce((name, value) => {
-  setFormData(prevFormData => ({
-    ...prevFormData,
-    [name]: value
-  }));
-}, 10000);
-
-const handleChange = (e) => {
-  e.preventDefault();
-  const { name, value } = e.target;
-  debouncedHandleChange(name, value);
-};
-  
-
-  
-  
-  const handleCheckboxChange = (e) => {
-    const { checked } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      shippingSameAsBilling: checked,
-      shipping: checked ? { ...prevFormData.billing } : { ...prevFormData.shipping },
-    }));
-  };
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
       const oauth = OAuth({
         consumer: { key: consumerKey, secret: consumerSecret },
@@ -241,7 +110,7 @@ const handleChange = (e) => {
             .digest("base64");
         },
       });
-
+  
       const orderData = {
         url: `${apiBaseUrl}/orders`,
         method: "POST",
@@ -258,15 +127,49 @@ const handleChange = (e) => {
           })),
         },
       };
-
+  
       const order = await axios(orderData);
-      
-
       console.log('Order submitted successfully:', order.data);
     } catch (error) {
       console.error("Error sending order:", error);
     }
   };
+  
+
+  const displayCheckout = () => {
+    const checkoutSection = document.getElementById('checkout');
+    checkoutSection.style.display = 'flex';
+    checkoutSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+
+  const debouncedHandleChange = debounce((name, value) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  }, 10000);
+  
+  const handleChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    debouncedHandleChange(name, value);
+  };
+
+
+
+  
+  const handleCheckboxChange = (e) => {
+    const { checked } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      shippingSameAsBilling: checked,
+      shipping: checked ? { ...prevFormData.billing } : { ...prevFormData.shipping },
+    }));
+  };
+  
+
+
 
   const InputField = ({ label, name, value, onChange }) => (
     <div className="flex flex-col gap-2">
@@ -360,7 +263,7 @@ const handleChange = (e) => {
             <InputField
               label="First Name"
               name="billing_first_name"
-              value={formData.billing_first_name}
+              value={formData.firstName}
               onChange={handleChange}
             />
             <InputField
